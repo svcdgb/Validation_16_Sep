@@ -1,0 +1,123 @@
+table 'Market eCom'
+	excludeFromModelRefresh
+	lineageTag: b1e5f21f-75ae-41a3-8e3c-21a7d0d59a82
+
+	column 'Commercial Area'
+		dataType: string
+		lineageTag: 45dc17ed-311c-4e94-9bf4-4946c4f8f03b
+		summarizeBy: none
+		sourceColumn: Commercial Area
+
+		annotation SummarizationSetBy = Automatic
+
+	column Market
+		dataType: string
+		lineageTag: 6978bb5f-2551-496a-9271-7cce63e3660e
+		summarizeBy: none
+		sourceColumn: Market
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sub Channel Group'
+		dataType: string
+		lineageTag: 857cd0b9-a324-4e70-a6aa-2b2cec9f84aa
+		summarizeBy: none
+		sourceColumn: Sub Channel Group
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Management Pnl Structure Level 3'
+		dataType: string
+		lineageTag: b8404831-c8f5-460d-a928-14016cf95c0c
+		summarizeBy: none
+		sourceColumn: Management Pnl Structure Level 3
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Name'
+		dataType: string
+		lineageTag: 4e190a25-0f61-4b54-b660-94cf8cd556ac
+		summarizeBy: none
+		sourceColumn: Month Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 2025
+		dataType: double
+		lineageTag: bbb9ad33-444c-42e9-97f6-5c46e58c4b3e
+		summarizeBy: sum
+		sourceColumn: 2025
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column BU2026
+		dataType: double
+		lineageTag: 2adfc8a2-099d-4752-a0cc-b492ae1d8266
+		summarizeBy: sum
+		sourceColumn: BU2026
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Growth
+		dataType: double
+		formatString: 0%;-0%;0%
+		lineageTag: bc6fc691-fd51-4485-971c-e2313377fa07
+		summarizeBy: sum
+		sourceColumn: Growth
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: string
+		lineageTag: f8cb2662-3621-4fd8-9c20-d26f99e2fbf8
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Is current month' = ```
+			
+			 IF(MONTH('Market eCom'[Date]) = MONTH(TODAY()),1,0)
+			```
+		formatString: 0
+		lineageTag: faecce66-04c1-494f-b9f1-b527947e8ebd
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column10
+		dataType: string
+		lineageTag: c5f79fc9-775d-4084-8766-626890c6487d
+		summarizeBy: none
+		sourceColumn: Column10
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column11
+		dataType: string
+		lineageTag: 3e67c419-7510-4de6-b9db-dba7fbdc5941
+		summarizeBy: none
+		sourceColumn: Column11
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Market eCom' = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(Web.Contents("https://electrolux.sharepoint.com/sites/CCJDataAnalytics/Shared%20Documents/1.D2C%20Domain/PBI%20-%20Manual%20Excel%20Files/Livedashboard_FinancialFigures.xlsx"), null, true),
+				    #"Market eCom_Sheet" = Source{[Item="Market eCom",Kind="Sheet"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(#"Market eCom_Sheet",{{"Column1", type text}, {"Column2", type text}, {"Column3", type text}, {"Column4", type text}, {"Column5", type text}, {"Column6", type number}, {"Column7", type any}, {"Column8", type any}, {"Column9", type text}}),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Changed Type", [PromoteAllScalars=true]),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers",{{"Growth", Percentage.Type}, {"BU2026", type number}})
+				in
+				    #"Changed Type1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

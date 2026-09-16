@@ -1,0 +1,537 @@
+table 'Measures (2)'
+	lineageTag: d60743ad-daa8-4a2b-a8cb-ff6f8c662149
+
+	measure 'Ind NS' = CALCULATE(SUM(fact_sales_order[NET_SALES_ORDER_AMT_EUR]))
+		formatString: "€"\ #,0;-"€"\ #,0;"€"\ #,0
+		lineageTag: 590d07c8-8b32-47a8-b1bb-1e6bec38a2d4
+
+	measure 'No of Order -1' =
+			
+			// CALCULATE(DISTINCTCOUNT(fact_sales_order[ORDER_NO]))
+			
+			VAR MaxDataDate =
+			    MAXX(
+			        FILTER(
+			            ALL('Dim DateTime'),
+			            NOT ISBLANK([Ind NS])
+			        ),
+			        INT('Dim DateTime'[DateTime])
+			    )
+			
+			VAR MaxHourWithData =
+			    MAXX(
+			        FILTER(
+			            ALL('Dim DateTime'),
+			            INT('Dim DateTime'[DateTime]) = MaxDataDate
+			                && NOT ISBLANK([Ind NS])
+			        ),
+			        'Dim DateTime'[DateTime]
+			    )
+			
+			RETURN
+			SUMX(
+			    VALUES('Dim DateTime'[DateTime]),
+			    VAR CurrentDateTime = 'Dim DateTime'[DateTime]
+			    RETURN
+			        IF(
+			            CurrentDateTime <= MaxHourWithData,
+			            CALCULATE(
+			                DISTINCTCOUNT(fact_sales_order[ORDER_NO]),
+			                'Dim DateTime'[DateTime] = CurrentDateTime - TIME(1,0,0)
+			            )
+			        )
+			)
+		formatString: #,0
+		lineageTag: 7c1b9700-501d-43d6-97b7-72b0882127ee
+
+	measure 'Ind NS D-1' =
+			
+			// VAR MaxHourWithDataToday =
+			//     CALCULATE(
+			//         MAX('Dim DateTime'[DateTime]),
+			//         FILTER(
+			//             ALL('Dim DateTime'),
+			//             INT('Dim DateTime'[DateTime]) = TODAY()
+			//                 && NOT ISBLANK([Ind NS])
+			//         )
+			//     )
+			
+			// RETURN
+			// SUMX(
+			//     VALUES('Dim DateTime'[DateTime]),
+			//     VAR CurrentDateTime = 'Dim DateTime'[DateTime]
+			//     RETURN
+			//         IF(
+			//             CurrentDateTime <= MaxHourWithDataToday,
+			//             CALCULATE(
+			//                 [Ind NS],
+			//                 FILTER(
+			//                     ALL('Dim DateTime'),
+			//                     'Dim DateTime'[DateTime] = CurrentDateTime - 1
+			//                 )
+			//             )
+			//         )
+			// )
+			
+			VAR MaxDataDate =
+			    MAXX(
+			        FILTER(
+			            ALL('Dim DateTime'),
+			            NOT ISBLANK([Ind NS])
+			        ),
+			        INT('Dim DateTime'[DateTime])
+			    )
+			
+			VAR MaxHourWithData =
+			    MAXX(
+			        FILTER(
+			            ALL('Dim DateTime'),
+			            INT('Dim DateTime'[DateTime]) = MaxDataDate
+			                && NOT ISBLANK([Ind NS])
+			        ),
+			        'Dim DateTime'[DateTime]
+			    )
+			
+			RETURN
+			SUMX(
+			    VALUES('Dim DateTime'[DateTime]),
+			    VAR CurrentDateTime = 'Dim DateTime'[DateTime]
+			    RETURN
+			        IF(
+			            CurrentDateTime <= MaxHourWithData,
+			            CALCULATE(
+			                [Ind NS],
+			                'Dim DateTime'[DateTime] = CurrentDateTime - TIME(1,0,0)
+			            )
+			        )
+			)
+		formatString: "€"\ #,0;-"€"\ #,0;"€"\ #,0
+		displayFolder: D-1
+		lineageTag: 9e2a752d-0c49-4745-a5db-2a5e61b84921
+
+	measure 'Ind NS D-7' =
+			
+			// VAR MaxHourWithDataToday =
+			//     CALCULATE(
+			//         MAX('Dim DateTime'[DateTime]),
+			//         FILTER(
+			//             ALL('Dim DateTime'),
+			//             INT('Dim DateTime'[DateTime]) = TODAY()
+			//                 && NOT ISBLANK([Ind NS])
+			//         )
+			//     )
+			
+			// RETURN
+			// SUMX(
+			//     VALUES('Dim DateTime'[DateTime]),
+			//     VAR CurrentDateTime = 'Dim DateTime'[DateTime]
+			//     VAR PrevWeekDateTime = CurrentDateTime - 7   -- shift 7 days
+			
+			//     RETURN
+			//         IF(
+			//             CurrentDateTime <= MaxHourWithDataToday,
+			//             CALCULATE(
+			//                 [Ind NS],
+			//                 FILTER(
+			//                     ALL('Dim DateTime'),
+			//                     'Dim DateTime'[DateTime] = PrevWeekDateTime
+			//                 )
+			//             )
+			//         )
+			// )
+			
+			VAR MaxDataDate =
+			    MAXX(
+			        FILTER(
+			            ALL('Dim DateTime'),
+			            NOT ISBLANK([Ind NS])
+			        ),
+			        INT('Dim DateTime'[DateTime])
+			    )
+			
+			VAR MaxHourWithData =
+			    MAXX(
+			        FILTER(
+			            ALL('Dim DateTime'),
+			            INT('Dim DateTime'[DateTime]) = MaxDataDate
+			                && NOT ISBLANK([Ind NS])
+			        ),
+			        'Dim DateTime'[DateTime]
+			    )
+			
+			RETURN
+			SUMX(
+			    VALUES('Dim DateTime'[DateTime]),
+			    VAR CurrentDateTime = 'Dim DateTime'[DateTime]
+			    VAR PrevWeekDateTime = CurrentDateTime - 7   -- shift 7 days
+			
+			    RETURN
+			        IF(
+			            CurrentDateTime <= MaxHourWithData,
+			            CALCULATE(
+			                [Ind NS],
+			                'Dim DateTime'[DateTime] = PrevWeekDateTime
+			            )
+			        )
+			)
+		formatString: "€"\ #,0;-"€"\ #,0;"€"\ #,0
+		displayFolder: D-7
+		lineageTag: 835c6d69-3165-429f-a0ff-1d453524ce40
+
+	measure 'Ind NS Y-1' =
+			
+			
+			// VAR MaxHourWithDataToday =
+			//     CALCULATE(
+			//         MAX('Dim DateTime'[DateTime]),
+			//         FILTER(
+			//             ALL('Dim DateTime'),
+			//             INT('Dim DateTime'[DateTime]) = TODAY()
+			//                 && NOT ISBLANK([Ind NS])
+			//         )
+			//     )
+			
+			// RETURN
+			// SUMX(
+			//     VALUES('Dim DateTime'[DateTime]),
+			//     VAR CurrentDateTime = 'Dim DateTime'[DateTime]
+			//     VAR PrevYearSameWeekday = CurrentDateTime - 364   -- ✅ 52 weeks back
+			
+			//     RETURN
+			//         IF(
+			//             CurrentDateTime <= MaxHourWithDataToday,
+			//             CALCULATE(
+			//                 [Ind NS],
+			//                 FILTER(
+			//                     ALL('Dim DateTime'),
+			//                     'Dim DateTime'[DateTime] = PrevYearSameWeekday
+			//                 )
+			//             )
+			//         )
+			// )
+			
+			
+			VAR MaxDataDate =
+			    MAXX(
+			        FILTER(
+			            ALL('Dim DateTime'),
+			            NOT ISBLANK([Ind NS])
+			        ),
+			        INT('Dim DateTime'[DateTime])
+			    )
+			
+			VAR MaxHourWithData =
+			    MAXX(
+			        FILTER(
+			            ALL('Dim DateTime'),
+			            INT('Dim DateTime'[DateTime]) = MaxDataDate
+			                && NOT ISBLANK([Ind NS])
+			        ),
+			        'Dim DateTime'[DateTime]
+			    )
+			
+			RETURN
+			SUMX(
+			    VALUES('Dim DateTime'[DateTime]),
+			    VAR CurrentDateTime = 'Dim DateTime'[DateTime]
+			    VAR PrevYearSameWeekday = CurrentDateTime - 364   -- 52 weeks back
+			
+			    RETURN
+			        IF(
+			            CurrentDateTime <= MaxHourWithData,
+			            CALCULATE(
+			                [Ind NS],
+			                'Dim DateTime'[DateTime] = PrevYearSameWeekday
+			            )
+			        )
+			)
+		formatString: "€"\ #,0;-"€"\ #,0;"€"\ #,0
+		displayFolder: Y-1
+		lineageTag: a8acca15-4a55-45c3-acbd-d85ed2d97577
+
+	measure 'Ind NS D-1 %' =
+			
+			VAR Ind_NS = [Ind NS]
+			VAR Ind_NS_D_1 = [Ind NS D-1]
+			
+			VAR _perc =
+			    DIVIDE(Ind_NS - Ind_NS_D_1, Ind_NS_D_1)
+			
+			
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    ISBLANK(_perc), BLANK(),
+			    _perc
+			)
+		formatString: 0%;-0%;0%
+		displayFolder: D-1
+		lineageTag: 7092d286-d729-479e-adb7-05266b081515
+
+	measure 'Ind NS D-1 Color' =
+			
+			VAR _perc =
+			    DIVIDE([Ind NS] - [Ind NS D-1], [Ind NS D-1])
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    _perc > 0, "#008000",   -- Green ✅
+			    _perc < 0, "#FF0000",   -- Red ✅
+			    "#000000"
+			)
+		displayFolder: D-1
+		lineageTag: 55155dac-ca52-414a-9876-7ac2b1d351e2
+
+	measure 'Ind NS D-7 %' = ```
+			
+			VAR Ind_NS = [Ind NS]
+			VAR Ind_NS_D_7 = [Ind NS D-7]
+			
+			VAR _perc =
+			    DIVIDE(Ind_NS - Ind_NS_D_7, Ind_NS_D_7)
+			
+			
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    ISBLANK(_perc), BLANK(),
+			    _perc 
+			)
+			```
+		formatString: 0%;-0%;0%
+		displayFolder: D-7
+		lineageTag: be7e9625-bd60-4dc7-ba5a-43d75ee5a242
+
+	measure 'Ind NS D-7 Color' =
+			
+			VAR _perc =
+			    DIVIDE([Ind NS] - [Ind NS D-7], [Ind NS D-7])
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    _perc > 0, "#008000",   -- Green ✅
+			    _perc < 0, "#FF0000",   -- Red ✅
+			    "#000000"
+			)
+		displayFolder: D-7
+		lineageTag: f698f960-c914-4124-8c8a-d88d26e4e88e
+
+	measure 'Ind NS Y-1 %' = ```
+			
+			VAR Ind_NS = [Ind NS]
+			VAR Ind_NS_Y_1 = [Ind NS Y-1]
+			
+			VAR _perc =
+			    DIVIDE(Ind_NS - Ind_NS_Y_1, Ind_NS_Y_1)
+			
+			
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    ISBLANK(_perc), BLANK(),
+			    _perc 
+			)
+			```
+		formatString: 0%;-0%;0%
+		displayFolder: Y-1
+		lineageTag: 15c4af52-7e03-46e6-89a0-ec583b817b61
+
+	measure 'Ind NS Y-1 Color' =
+			
+			VAR _perc =
+			    DIVIDE([Ind NS] - [Ind NS Y-1], [Ind NS Y-1])
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    _perc > 0, "#008000",   -- Green ✅
+			    _perc < 0, "#FF0000",   -- Red ✅
+			    "#000000"
+			)
+		displayFolder: Y-1
+		lineageTag: 8c51c4d3-a35e-4444-9480-94893e0c3ba9
+
+	measure 'Ind NS Y-1 % _Updated' =
+			
+			IF(ISBLANK([Ind NS Y-1 %]),0,[Ind NS Y-1 %])
+		formatString: 0%;-0%;0%
+		lineageTag: f28dac12-9a4e-459d-b4f6-e02b9400c7b7
+
+	measure 'Ind NS D-1 % Arrow' = ```
+			
+			VAR Ind_NS = [Ind NS]
+			VAR Ind_NS_D_1 = [Ind NS D-1]
+			
+			VAR _perc =
+			    DIVIDE(Ind_NS - Ind_NS_D_1, Ind_NS_D_1)
+			
+			
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    ISBLANK(_perc), BLANK(),
+			    _perc > 0, "▲ ",
+			    _perc < 0, "▼ " ,
+			    "→ " 
+			)
+			```
+		displayFolder: D-1
+		lineageTag: 6ab3642c-4fb5-4acf-b7e5-e81ba7434873
+
+	measure 'Ind NS D-7 % Arrow' = ```
+			
+			VAR Ind_NS = [Ind NS]
+			VAR Ind_NS_D_7 = [Ind NS D-7]
+			
+			VAR _perc =
+			    DIVIDE(Ind_NS - Ind_NS_D_7, Ind_NS_D_7)
+			
+			
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    ISBLANK(_perc), BLANK(),
+			    _perc > 0, "▲ " ,
+			    _perc < 0, "▼ " ,
+			    "→ " 
+			)
+			```
+		displayFolder: D-7
+		lineageTag: be44c308-f9c4-42a4-93c2-0baa9a68de17
+
+	measure 'Ind NS Y-1 % Arrow' = ```
+			
+			VAR Ind_NS = [Ind NS]
+			VAR Ind_NS_Y_1 = [Ind NS Y-1]
+			
+			VAR _perc =
+			    DIVIDE(Ind_NS - Ind_NS_Y_1, Ind_NS_Y_1)
+			
+			
+			
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    ISBLANK(_perc), BLANK(),
+			    _perc > 0, "▲ " ,
+			    _perc < 0, "▼ " ,
+			    "→ " 
+			)
+			```
+		displayFolder: Y-1
+		lineageTag: f3dc0d61-7828-45d6-ac14-91b7374a3ae7
+
+	measure 'Max Date' =
+			
+			VAR MaxDate =
+			    CALCULATE(MAX(fact_sales_order[ORDER_HOUR]) + + TIME(1, 0, 0),ALL('Dim DateTime'),ALL(Dim_Country))
+			RETURN
+			"Data reflects performance up to "
+			    & FORMAT(MaxDate, "dd-MMM-yyyy hh:mm AM/PM")
+			    & " CEST"
+		lineageTag: 77c2214b-55a9-4626-bc5b-2e9492920437
+
+	measure MAX_DATE =
+			
+			CALCULATE( MAX(fact_sales_order[ORDER_PLACED_TIMESTAMP]),ALL(fact_sales_order))
+		formatString: General Date
+		lineageTag: 686d543c-8539-4061-8bbe-0d2a1af0d2a6
+
+	measure 'PY Ind NS' = ```
+			
+			VAR CurrentDate = MAX('Dim DateTime'[Date])
+			VAR CurrentHour = SELECTEDVALUE('Dim DateTime'[Hour])
+			
+			VAR Final =
+			IF(
+			    HASONEVALUE('Dim DateTime'[Hour]),
+			    
+			    -- ✅ Row level (hour exists)
+			    COALESCE(
+			        CALCULATE(
+			            [Ind NS],
+			            FILTER(
+			                ALL('Dim DateTime'),
+			                'Dim DateTime'[Date] = CurrentDate - 364 &&
+			                'Dim DateTime'[Hour] = CurrentHour
+			            )
+			        ),
+			        0
+			    ),
+			
+			    -- ✅ Total level (no single hour → sum all hours)
+			    COALESCE(
+			        CALCULATE(
+			            [Ind NS],
+			            FILTER(
+			                ALL('Dim DateTime'),
+			                'Dim DateTime'[Date] = CurrentDate - 364
+			            )
+			        ),
+			        0
+			    )
+			)
+			
+			RETURN IF(ISBLANK(Final),0,Final)
+			```
+		formatString: "€"\ #,0;-"€"\ #,0;"€"\ #,0
+		lineageTag: 5bfd8bb4-cf2e-459b-9a89-7b3bc6150da8
+
+	measure 'Ind NS_0' = IF(ISBLANK([Ind NS]),0,[Ind NS])
+		formatString: "€"\ #,0;-"€"\ #,0;"€"\ #,0
+		lineageTag: 7ad2a5af-5514-4727-88a2-c7ab1521b3fd
+
+	measure 'AP Growth % Color' =
+			
+			
+			VAR _perc =
+			    [AP Growth %]
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    _perc > 0, "#008000",   -- Green ✅
+			    _perc < 0, "#FF0000",   -- Red ✅
+			    "#000000"
+			)
+		lineageTag: 4c8e0b8f-f0fe-482c-8d1f-16ffe445f4d2
+
+	measure Market_e_com_color =
+			
+			VAR A = SUM('Market eCom'[Growth])
+			
+			
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    A > 0, "#008000",   -- Green ✅
+			    A < 0, "#FF0000",   -- Red ✅
+			    "#000000"
+			)
+		lineageTag: 2cce7fde-caf9-468f-8205-ca25598b4b00
+
+	measure 'EU ecom Color' =
+			
+			VAR _perc =
+			    SUM('EU eCom'[Growth])
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    _perc > 0, "#008000",   -- Green ✅
+			    _perc < 0, "#FF0000",   -- Red ✅
+			    "#000000"
+			)
+		lineageTag: 2cfdfcff-506a-4bd1-b6ad-2e16415f699e
+
+	partition 'Measures (2)' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column1"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

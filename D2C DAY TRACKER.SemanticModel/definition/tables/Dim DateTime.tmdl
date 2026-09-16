@@ -1,0 +1,120 @@
+table 'Dim DateTime'
+	lineageTag: 0abe3268-6974-4b08-8b4c-e4a3591ba245
+
+	column Date
+		formatString: Long Date
+		lineageTag: 66664434-0645-43f9-bb39-50cebc7bf31e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Value
+		formatString: 0
+		lineageTag: 4bfcec66-cb63-4564-81eb-ff02b8e6bcb1
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DateTime
+		formatString: General Date
+		lineageTag: f8f95a40-6d3b-48b3-a901-480b4f600b89
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [DateTime]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Hour
+		formatString: 0
+		lineageTag: 0a9d122e-4c9a-45b2-9372-4c8e9d475152
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Hour]
+
+		annotation SummarizationSetBy = Automatic
+
+	column NewDate =
+			
+			VAR MaxDate =
+			    CALCULATE(
+			        MAX('Dim DateTime'[Date]),
+			        ALL('Dim DateTime')
+			    )
+			RETURN
+			IF(
+			    'Dim DateTime'[Date] = MaxDate,
+			    "Today's Date",
+			    FORMAT('Dim DateTime'[Date], "MM/dd/yyyy")
+			)
+		lineageTag: e0bfa15e-3949-421d-899a-b009c756a7e6
+		summarizeBy: none
+		sortByColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Hour Label'
+		lineageTag: bea72999-96bb-48da-849a-390f37b30ee6
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Hour Label]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column = LOOKUPVALUE(fact_sales_order[ORDER_PLACED_DT],fact_sales_order[ORDER_PLACED_DT],'Dim DateTime'[Date])
+		formatString: General Date
+		lineageTag: 3453efec-5955-4f77-9b78-0d74960d5daf
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Name' = FORMAT('Dim DateTime'[Date],"Mmm-YY")
+		lineageTag: 56a6e23c-3a01-4547-aa88-0c224a571e75
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Dim DateTime' = calculated
+		mode: import
+		source =
+				
+				VAR MinDateTime =
+				    MINX(
+				        fact_sales_order,
+				        fact_sales_order[ORDER_PLACED_TIMESTAMP]
+				    )
+				
+				VAR MaxDateTime =
+				TODAY() + TIME(23, 0, 0)
+				
+				RETURN
+				ADDCOLUMNS(
+				    GENERATE(
+				        CALENDAR(
+				            DATEVALUE(MinDateTime),
+				            DATEVALUE(MaxDateTime)
+				        ),
+				        VAR CurrentDate = [Date]
+				        RETURN
+				            FILTER(
+				                ADDCOLUMNS(
+				                    GENERATESERIES(0, 23, 1),
+				                    "Hour", [Value],
+				                    "DateTime", CurrentDate + TIME([Value], 0, 0)
+				                ),
+				                CurrentDate + TIME([Value], 0, 0) <= MaxDateTime
+				            )
+				    ),
+				
+				    // ✅ Formatting & labels
+				
+				    "Hour Label", FORMAT([Hour], "00") & ":00"
+				)
+
+	annotation PBI_Id = 443bd950ee014f688110d87cd795ba20
+

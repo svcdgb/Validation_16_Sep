@@ -1,0 +1,25 @@
+model Model
+	culture: en-IN
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	maxParallelismPerRefresh: 12
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["Dim_Country","Measures (2)","CA eCom","EU eCom","Market eCom","fact_sales_order"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table 'Dim DateTime'
+ref table Dim_Country
+ref table 'Measures (2)'
+ref table 'CA eCom'
+ref table 'EU eCom'
+ref table 'Market eCom'
+ref table fact_sales_order
+
+ref cultureInfo en-IN
+

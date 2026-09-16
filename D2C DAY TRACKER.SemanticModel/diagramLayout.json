@@ -1,0 +1,113 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 417,
+            "y": 0
+          },
+          "nodeIndex": "Dim_Country",
+          "nodeLineageTag": "1c5fd19a-c781-4d1d-9147-9ffc1d2137a8",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 931,
+            "y": 177.5
+          },
+          "nodeIndex": "Measures (2)",
+          "nodeLineageTag": "d60743ad-daa8-4a2b-a8cb-ff6f8c662149",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 386.09132420091322,
+            "y": 683.810502283105
+          },
+          "nodeIndex": "EU eCom",
+          "nodeLineageTag": "3eeff7c5-86b2-4c54-87bc-f0a60b9b5931",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1013,
+            "y": 377.25
+          },
+          "nodeIndex": "CA eCom",
+          "nodeLineageTag": "f5ec5cbf-d50b-4a1a-a43a-1f96f00fad3a",
+          "size": {
+            "height": 332.95433789954348,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 280.00799086757991
+          },
+          "nodeIndex": "Market eCom",
+          "nodeLineageTag": "b1e5f21f-75ae-41a3-8e3c-21a7d0d59a82",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 143.36529680365297,
+            "y": 0
+          },
+          "nodeIndex": "Dim DateTime",
+          "nodeLineageTag": "0abe3268-6974-4b08-8b4c-e4a3591ba245",
+          "size": {
+            "height": 236,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 550.30136986301363,
+            "y": 244.77511415525112
+          },
+          "nodeIndex": "fact_sales_order",
+          "nodeLineageTag": "c6515f70-8791-4e90-a5fc-874df67aa3b1",
+          "size": {
+            "height": 405.89954337899553,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 81.66943207767244,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

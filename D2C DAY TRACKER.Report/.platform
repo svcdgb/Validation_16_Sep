@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "D2C DAY TRACKER"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "fecef450-2a5d-4e52-b7e7-dd8bbfd80b92"
+  }
+}

@@ -1,0 +1,75 @@
+table 'EU eCom'
+	excludeFromModelRefresh
+	lineageTag: 3eeff7c5-86b2-4c54-87bc-f0a60b9b5931
+
+	measure Month_Name = FORMAT(MAX('Dim DateTime'[Date]),"Mmm") & " AP :"
+		lineageTag: 8aeecfda-aa50-447a-89d9-b1bc6f3afc7e
+
+	column 'Month Name'
+		dataType: string
+		lineageTag: 509732e5-b7da-47f8-b967-46b014c8a3a4
+		summarizeBy: none
+		sourceColumn: Month Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sum of  2 025 '
+		dataType: double
+		lineageTag: f8c01282-419c-457e-995c-d9b0c31040f4
+		summarizeBy: sum
+		sourceColumn: "Sum of  2 025 "
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Sum of BU2026'
+		dataType: double
+		lineageTag: 0a3f5407-f66b-47c8-9b31-6c48d80a24ce
+		summarizeBy: sum
+		sourceColumn: Sum of BU2026
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Growth
+		dataType: double
+		formatString: 0%;-0%;0%
+		lineageTag: ebf31a73-3dd2-474c-9c46-31a6dde0577c
+		summarizeBy: sum
+		sourceColumn: Growth
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 0750eb5a-bc30-4797-96f5-b0ac527f309f
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Is current month' = IF(MONTH('EU eCom'[Date]) = MONTH(TODAY()),1,0)
+		formatString: 0
+		lineageTag: a950ea68-204e-4400-bf74-d89389f527de
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'EU eCom' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("VZI9SwNBEIb/S8AujjvfM6UgFoJaWIYUMQQb0SAq+O/dnbvopbvh9tnn3Xd3s1nd7d4uyVbrFUomcSq0HJNLRkYDpTEZOF2Mjyu8otbXb9eb1e3heUbJsokYYIxJtaWhgHufiIBwoLRE73cfJ6t2iziQl1WdNRsIDqIBx0B5iV4fTyizMTaC1LI6GjcElNoIrKxybv05BZZ0F5qtmmhBClqBHdgGqkv07uuvptab6YujajIJ8mbdNlm5arJz9HVGzdBIDbQiRp/SA3RKBE0G6mdn/Xo5BR4a7ZdTgY3FqSNGU2ApNJbo0+E4o8qjUoIoNEMtuM1oglTDuUQf958z6pFm0q2j4f44qGES4DgrM1jVhG3JPrx/TywpmmswRK3u6SmtJ45Jm5UYz97TzWE/s03NuF+/VFGp3s/ukOPfpfQdi/1/UNtf", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [#"Month Name" = _t, #"Sum of  2 025 " = _t, #"Sum of BU2026" = _t, Growth = _t, Date = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Month Name", type text}, {"Sum of  2 025 ", type number}, {"Sum of BU2026", type number}, {"Growth", Percentage.Type}, {"Date", type date}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

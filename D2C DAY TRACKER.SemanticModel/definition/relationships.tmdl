@@ -1,0 +1,28 @@
+relationship 524b081b-b652-9c7d-d6c8-6f289b2a5df1
+	toCardinality: many
+	fromColumn: 'Market eCom'.Market
+	toColumn: Dim_Country.Market
+
+relationship 58082e57-3759-21e6-cf86-9561f0e0bb44
+	fromColumn: fact_sales_order.ORDER_HOUR
+	toColumn: 'Dim DateTime'.DateTime
+
+relationship 5b458cd5-c35d-b1ab-dc89-18f5b3f5a84a
+	fromColumn: fact_sales_order.COUNTRY_CD
+	toColumn: Dim_Country.country_code_alpha3
+
+relationship 8e92d644-5c68-eb8c-caad-7e70b5da52b8
+	toCardinality: many
+	fromColumn: 'EU eCom'.'Month Name'
+	toColumn: 'Dim DateTime'.'Month Name'
+
+relationship 3fb1cd80-9728-b129-ee5c-5fd6e374d837
+	toCardinality: many
+	fromColumn: 'CA eCom'.'Month Name'
+	toColumn: 'Dim DateTime'.'Month Name'
+
+relationship 1c68d273-fffc-e9db-4da0-4abf0cfec960
+	toCardinality: many
+	fromColumn: 'Market eCom'.'Month Name'
+	toColumn: 'Dim DateTime'.'Month Name'
+

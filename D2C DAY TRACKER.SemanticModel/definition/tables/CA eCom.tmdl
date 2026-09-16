@@ -1,0 +1,91 @@
+table 'CA eCom'
+	excludeFromModelRefresh
+	lineageTag: f5ec5cbf-d50b-4a1a-a43a-1f96f00fad3a
+
+	measure 'AP Growth %' = DIVIDE((SUM('Market eCom'[BU2026]))- SUM('Market eCom'[2025]),(SUM('Market eCom'[2025])))
+		formatString: 0%;-0%;0%
+		lineageTag: 91a060f0-4f94-4c2c-a461-7bf0e36d21ff
+
+	column 'Commercial Area'
+		dataType: string
+		lineageTag: 616978a1-aced-4dad-bb9f-c9f8674f4b30
+		summarizeBy: none
+		sourceColumn: Commercial Area
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Name'
+		dataType: string
+		lineageTag: 1ab4bc53-ea01-4bbb-b766-c4411c443182
+		summarizeBy: none
+		sourceColumn: Month Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sum of  2 025 '
+		dataType: double
+		lineageTag: 900a7142-92c3-4278-be69-e8920d4eba07
+		summarizeBy: sum
+		sourceColumn: "Sum of  2 025 "
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Sum of BU2026'
+		dataType: double
+		lineageTag: 1cee22d9-0dcc-4d5c-94a5-6b69c82da8a7
+		summarizeBy: sum
+		sourceColumn: Sum of BU2026
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Growth
+		dataType: double
+		formatString: 0%;-0%;0%
+		lineageTag: ee0bbd0b-cc28-4e0d-b743-7a39929b95df
+		summarizeBy: sum
+		sourceColumn: Growth
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		formatString: mmmm yyyy
+		lineageTag: 26d254eb-1971-44b6-be5e-73e8066fcd2f
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column 'Is current month' = ```
+			
+			 IF(MONTH('CA eCom'[Date]) = MONTH(TODAY()),1,0)
+			
+			```
+		formatString: 0
+		lineageTag: 59e83ad1-c975-4135-8341-1375695a38fe
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'CA eCom' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("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", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [#"Commercial Area" = _t, #"Month Name" = _t, #"Sum of  2 025 " = _t, #"Sum of BU2026" = _t, Growth = _t, Date = _t]),
+				    #"Changed Type1" = Table.TransformColumnTypes(Source,{{"Sum of  2 025 ", type number}, {"Sum of BU2026", type number}, {"Growth", Percentage.Type}, {"Date", type date}}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Changed Type1",{{"Commercial Area", type text}, {"Month Name", type text}, {"Sum of  2 025 ", type number}, {"Sum of BU2026", type number}, {"Growth", Percentage.Type}, {"Date", type date}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

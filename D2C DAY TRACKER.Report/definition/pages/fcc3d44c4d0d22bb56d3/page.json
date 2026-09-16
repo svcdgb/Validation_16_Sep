@@ -1,0 +1,25 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "fcc3d44c4d0d22bb56d3",
+  "displayName": "(TV) Channel per Hour",
+  "displayOption": "FitToPage",
+  "height": 1150,
+  "width": 1280,
+  "visualInteractions": [
+    {
+      "source": "7459fd032d8207501de7",
+      "target": "31a0b99d6b97aa09a73d",
+      "type": "NoFilter"
+    },
+    {
+      "source": "7d5c3152060d8997a244",
+      "target": "31a0b99d6b97aa09a73d",
+      "type": "NoFilter"
+    },
+    {
+      "source": "c0da66b3090a0d367d5b",
+      "target": "31a0b99d6b97aa09a73d",
+      "type": "NoFilter"
+    }
+  ]
+}

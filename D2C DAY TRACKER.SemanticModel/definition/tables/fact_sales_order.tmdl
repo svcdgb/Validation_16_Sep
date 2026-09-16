@@ -1,0 +1,121 @@
+table fact_sales_order
+	lineageTag: c6515f70-8791-4e90-a5fc-874df67aa3b1
+
+	column ORDER_NO
+		dataType: string
+		lineageTag: 8e8da041-6983-4787-9973-57d19a5b9a3d
+		summarizeBy: none
+		sourceColumn: ORDER_NO
+
+		annotation SummarizationSetBy = Automatic
+
+	column ORDER_PLACED_TIMESTAMP
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 9a6c51fe-8fae-4320-ba16-e67298d7ef2d
+		summarizeBy: none
+		sourceColumn: ORDER_PLACED_TIMESTAMP
+
+		annotation SummarizationSetBy = Automatic
+
+	column FS_CHANNEL_CD
+		dataType: string
+		lineageTag: f86aaa94-e5aa-4b4e-82fe-e1573d4d776d
+		summarizeBy: none
+		sourceColumn: FS_CHANNEL_CD
+
+		annotation SummarizationSetBy = Automatic
+
+	column COUNTRY_CD
+		dataType: string
+		lineageTag: 72562b57-42b5-4b6e-89a2-d89c7560781d
+		summarizeBy: none
+		sourceColumn: COUNTRY_CD
+
+		annotation SummarizationSetBy = Automatic
+
+	column PRODUCT_TYPE
+		dataType: string
+		lineageTag: 6fec99e0-0d54-4dc2-a078-ad8b71cc18c5
+		summarizeBy: none
+		sourceColumn: PRODUCT_TYPE
+
+		annotation SummarizationSetBy = Automatic
+
+	column CHANNEL_CATEGORY
+		dataType: string
+		lineageTag: 7ad4af40-4f74-4689-9c82-92b0bacf1abb
+		summarizeBy: none
+		sourceColumn: CHANNEL_CATEGORY
+
+		annotation SummarizationSetBy = Automatic
+
+	column ORDER_PLACED_DT
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 51bf6fa8-c26c-4a50-a97e-3cd010310814
+		summarizeBy: none
+		sourceColumn: ORDER_PLACED_DT
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ORDER_HOUR
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 2ce9c0d7-a5b8-481b-a852-fb0a31f620fd
+		summarizeBy: none
+		sourceColumn: ORDER_HOUR
+
+		annotation SummarizationSetBy = Automatic
+
+	column NET_SALES_ORDER_AMT_EUR
+		dataType: double
+		lineageTag: 51c99ec1-358b-44f9-a3f3-bb1b321e4156
+		summarizeBy: sum
+		sourceColumn: NET_SALES_ORDER_AMT_EUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column eprep_load_ts_utc
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 5ba65e7a-1230-440d-b170-c912d4fb6c78
+		summarizeBy: none
+		sourceColumn: eprep_load_ts_utc
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Column 2' = ```
+			
+			Var 
+			Max_Hour =
+			CALCULATE(MAX(fact_sales_order[ORDER_HOUR]),FILTER(ALL(fact_sales_order),fact_sales_order[ORDER_PLACED_TIMESTAMP]))
+			
+			RETURN 
+			IF(fact_sales_order[ORDER_PLACED_TIMESTAMP] <= Max_Hour,1,0)
+			```
+		formatString: 0
+		lineageTag: 95b4ad3f-801d-44ae-868d-652ccc380fd1
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_sales_order = m
+		mode: import
+		source =
+				let
+				    Source = Databricks.Catalogs("adb-590047181769076.16.azuredatabricks.net", "sql/protocolv1/o/590047181769076/0827-151004-t9s99lfm", [Catalog=null, Database=null, QueryTags=null, EnableAutomaticProxyDiscovery=null, Implementation="2.0", Protocol=null]),
+				    d2c_prd_Database = Source{[Name="d2c_prd",Kind="Database"]}[Data],
+				    gold_internal_Schema = d2c_prd_Database{[Name="gold_internal",Kind="Schema"]}[Data],
+				    d2c_sales_order_derived_current_day_Table = gold_internal_Schema{[Name="d2c_sales_order_derived_current_day",Kind="Table"]}[Data]
+				in
+				    d2c_sales_order_derived_current_day_Table
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

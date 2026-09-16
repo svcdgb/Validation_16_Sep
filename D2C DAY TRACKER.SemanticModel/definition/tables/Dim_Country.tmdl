@@ -1,0 +1,65 @@
+table Dim_Country
+	excludeFromModelRefresh
+	lineageTag: 1c5fd19a-c781-4d1d-9147-9ffc1d2137a8
+
+	column country_code_alpha2
+		dataType: string
+		lineageTag: 5a7852ee-c7ad-4b19-a93d-e445e1d5eb6e
+		summarizeBy: none
+		sourceColumn: country_code_alpha2
+
+		annotation SummarizationSetBy = Automatic
+
+	column country_code_alpha3
+		dataType: string
+		lineageTag: 1daa6623-4afb-4132-acd4-ccaafbf1d7de
+		summarizeBy: none
+		sourceColumn: country_code_alpha3
+
+		annotation SummarizationSetBy = Automatic
+
+	column cluster
+		dataType: string
+		lineageTag: 26eb9e38-269f-4a2a-8140-5c9dc5e8e840
+		summarizeBy: none
+		sourceColumn: cluster
+
+		annotation SummarizationSetBy = Automatic
+
+	column business_area
+		dataType: string
+		lineageTag: 0df849ae-fb42-417f-b1c0-0099cb516b00
+		summarizeBy: none
+		sourceColumn: business_area
+
+		annotation SummarizationSetBy = Automatic
+
+	column Market
+		dataType: string
+		lineageTag: f82110f6-d750-4fbe-8615-2a4a0e82035e
+		summarizeBy: none
+		sourceColumn: Market
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Commercial Area'
+		dataType: string
+		lineageTag: f43f099b-d15d-450e-9aed-899fc36e1a80
+		summarizeBy: none
+		sourceColumn: Commercial Area
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Country = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("lVZNb+MgEP0rUc+VttrD3h3HcSxjx4I43W23B2Ijx4oDFcZtk1+/DPkoxGy1e0HO8JiPN48hz893Abq718tUr2EU6TUq8bKAj6DbUN5S/ZV/C+5e7jV2BuYc1mTDpNn7hPNaSOnAMzDjzONa7tmN6xWYS1hjJveUHya/h4eH7z8mwdCr21BXU8i4krQzLqa/tGGK8DjclHVUDr0VbmrMETKbnHXDxw2+aYe9/npkvTodCMCeLDzORa9LmVBeTxZMHlkj3lpulzaNARX78hq6hkqHhwXAFng9BodSUOVgQyg4/FV4sIdXt97wCaxPkQd6ZNV2gtnrsOnaCnboueRZqn/NclhzIeu26u1zM8b3VO5Om2prTpw8k9U4StQrcWr41f080b/mSe53P295pyl13M+BmzmGTswl5RVzDlwsRAxnfAz2OFqO04mZkI3D5czUFJX/pL8z4kZ/psMxDj3hJGMmt0u0GCQRx9C/Mr0EStwzA5O8ZwdbG5DdoszHARYD10I62PQmBG4pQX56k4pd6D07N9ETjL5IKZGXQ9drkUCvkxW0JFG0Ozjws+GzISmoMA2exgWk9Eh3215RbqWE4BagdTCGI6reXDUhUBNKrO580T/Uas0rxnvFWicgVINWpSdgq7YDvVEwAiAqf/qHCBo+2H4jBtnYhGUQIjOBRoRltFO2JjMYtNnMU38mulq8OViQXRYuvXcjE5xWwkYba+4ZBxqqiWGNtOG5URGa+QvNmdoyCcronUphcGTpbBzD3OhJRitWC/cVyCH/fIn9otWmd3pwRkIBmRVLNA5SiLNWr+0qgPQCG+pHr1ehXQ6Nvsm2XjGkg5cePWCxv1UDBhguiQc89L1TJoEnkWTYJwJCuaZGttxuAAavBHseacLkxvUNtJN16oF2WjI7N2mSGLRnpAD65o2OIIuIFF4CySs1d+mTPWLMj5G/meSd1Yw7zQzN67o47bbqeBKVe8g227/g/AoIXZWeh3Y1yJ0zSmOgMp4C9G/TruStYvUkbXlTC+e/gJlI68B7h9f6ja50C8NW2fHKwETypFbupCaO2U0pUwP+/9xe/gA=", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [country_code_alpha2 = _t, country_code_alpha3 = _t, cluster = _t, business_area = _t, Market = _t, #"Commercial Area" = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"country_code_alpha2", type text}, {"country_code_alpha3", type text}, {"cluster", type text}, {"business_area", type text}, {"Market", type text}, {"Commercial Area", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
